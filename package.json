@@ -1,0 +1,17 @@
+{
+  "name": "js-plot-tools",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@jrc03c/js-math-tools": "git+https://github.com/jrc03c/js-math-tools.git"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "build": "browserify -e src/index.js -o dist/js-plot-tools.js",
+    "watch": "watchify -e src/index.js -o dist/js-plot-tools.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
