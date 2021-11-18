@@ -1,6 +1,4 @@
 const { isAString, isUndefined } = require("@jrc03c/js-math-tools")
-const fs = require("fs")
-const makeKey = require("@jrc03c/make-key")
 const { exec } = require("child_process")
 const express = require("express")
 const path = require("path")
@@ -74,10 +72,10 @@ class Plot {
 
       app.get("/data", (request, response) => {
         response.send({ type, data })
-        process.exit(0)
+        listener.close()
       })
 
-      app.listen(12345)
+      const listener = app.listen(12345)
       exec("xdg-open http://localhost:12345")
       return self
     }
