@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "@jrc03c/js-math-tools": "git+https://github.com/jrc03c/js-math-tools.git"
+    "@jrc03c/js-math-tools": "git+https://github.com/jrc03c/js-math-tools.git",
+    "@jrc03c/make-key": "github:jrc03c/make-key"
   },
-  "devDependencies": {},
   "scripts": {
     "build": "browserify -e src/index.js -o dist/js-plot-tools.js",
     "watch": "watchify -e src/index.js -o dist/js-plot-tools.js"

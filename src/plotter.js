@@ -1,4 +1,14 @@
 const { isAString, isUndefined } = require("@jrc03c/js-math-tools")
+const fs = require("fs")
+const makeKey = require("@jrc03c/make-key")
+const { exec } = require("child_process")
+
+if (!String.prototype.replaceAll) {
+  String.prototype.replaceAll = function (a, b) {
+    const self = this
+    return self.split(a).join(b)
+  }
+}
 
 class Plotter {
   constructor(element) {
@@ -41,7 +51,7 @@ class Plotter {
     // - inject data into html template
     // - open rendered html file in browser
     else {
-      self.isInBrowser = true
+      self.isInBrowser = false
     }
 
     return self
@@ -53,7 +63,20 @@ class Plotter {
     if (self.isInBrowser) {
       self.container.appendChild(self.canvas)
     } else {
-      // ...
+      const template = fs.readFileSync("src/template.html", "utf8")
+      const plotScriptMin = fs.readFileSync("dist/js-plot-tools.js", "utf8")
+
+      const out = template
+        .replaceAll("$data", JSON.stringify(data))
+        .replaceAll("$plotScriptMin", plotScriptMin)
+
+      if (!fs.existsSync("temp")) {
+        fs.mkdirSync("temp")
+      }
+
+      const key = makeKey(32)
+      fs.writeFileSync("temp/" + key + ".html", out, "utf8")
+      exec(`xdg-open ${"temp/" + key + ".html"}`)
     }
 
     return self
