@@ -10,7 +10,7 @@ if (!String.prototype.replaceAll) {
   }
 }
 
-class Plotter {
+class Plot {
   constructor(element) {
     const self = this
 
@@ -84,4 +84,4 @@ class Plotter {
   }
 }
 
-module.exports = Plotter
+module.exports = Plot
