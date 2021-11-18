@@ -57,7 +57,7 @@ class Plotter {
     return self
   }
 
-  show(data) {
+  draw(type, data) {
     const self = this
 
     if (self.isInBrowser) {
@@ -67,6 +67,7 @@ class Plotter {
       const plotScriptMin = fs.readFileSync("dist/js-plot-tools.js", "utf8")
 
       const out = template
+        .replaceAll("$type", type)
         .replaceAll("$data", JSON.stringify(data))
         .replaceAll("$plotScriptMin", plotScriptMin)
 

@@ -8,10 +8,13 @@
     "@jrc03c/make-key": "github:jrc03c/make-key"
   },
   "scripts": {
-    "build": "browserify -e src/index.js -o dist/js-plot-tools.js",
-    "watch": "watchify -e src/index.js -o dist/js-plot-tools.js"
+    "build": "browserify -e src/index.js | uglifyjs -cm > dist/js-plot-tools.js",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "uglifyify": "^5.0.2"
+  }
 }
