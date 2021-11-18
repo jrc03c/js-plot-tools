@@ -2,6 +2,8 @@ const { isAString, isUndefined } = require("@jrc03c/js-math-tools")
 const fs = require("fs")
 const makeKey = require("@jrc03c/make-key")
 const { exec } = require("child_process")
+const express = require("express")
+const path = require("path")
 
 if (!String.prototype.replaceAll) {
   String.prototype.replaceAll = function (a, b) {
@@ -63,21 +65,21 @@ class Plot {
     if (self.isInBrowser) {
       self.container.appendChild(self.canvas)
     } else {
-      const template = fs.readFileSync("src/template.html", "utf8")
-      const plotScriptMin = fs.readFileSync("dist/js-plot-tools.js", "utf8")
+      const app = express()
 
-      const out = template
-        .replaceAll("$type", type)
-        .replaceAll("$data", JSON.stringify(data))
-        .replaceAll("$plotScriptMin", plotScriptMin)
+      app.use(
+        "/",
+        express.static(path.join(__dirname, "public"), { extensions: ["html"] })
+      )
 
-      if (!fs.existsSync("temp")) {
-        fs.mkdirSync("temp")
-      }
+      app.get("/data", (request, response) => {
+        response.send({ type, data })
+        process.exit(0)
+      })
 
-      const key = makeKey(32)
-      fs.writeFileSync("temp/" + key + ".html", out, "utf8")
-      exec(`xdg-open ${"temp/" + key + ".html"}`)
+      app.listen(12345)
+      exec("xdg-open http://localhost:12345")
+      return self
     }
 
     return self

@@ -5,7 +5,11 @@
   "main": "index.js",
   "dependencies": {
     "@jrc03c/js-math-tools": "git+https://github.com/jrc03c/js-math-tools.git",
-    "@jrc03c/make-key": "github:jrc03c/make-key"
+    "@jrc03c/make-key": "github:jrc03c/make-key",
+    "express": "^4.17.1",
+    "vue": "^2.6.14",
+    "vue-router": "^3.5.3",
+    "vuex": "^3.6.2"
   },
   "scripts": {
     "build": "browserify -e src/index.js | uglifyjs -cm > dist/js-plot-tools.js",
