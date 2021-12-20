@@ -3,12 +3,14 @@
     <meta charset="utf-8" />
   </head>
   <body>
-    Hello, world!
-
+    <script src="js-plot-tools.js"></script>
     <script>
-      fetch("/data").then(response => {
-        response.json().then(console.log)
-      })
+      window.onload = async function () {
+        const response = await fetch("/get-instructions")
+        const instructions = await response.json()
+        plot.instructions = instructions
+        plot.show()
+      }
     </script>
   </body>
 </html>

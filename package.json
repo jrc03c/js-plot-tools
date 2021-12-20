@@ -6,19 +6,18 @@
   "dependencies": {
     "@jrc03c/js-math-tools": "git+https://github.com/jrc03c/js-math-tools.git",
     "@jrc03c/make-key": "github:jrc03c/make-key",
+    "esbuild": "^0.14.6",
     "express": "^4.17.1",
     "vue": "^2.6.14",
     "vue-router": "^3.5.3",
     "vuex": "^3.6.2"
   },
   "scripts": {
-    "build": "browserify -e src/index.js | uglifyjs -cm > dist/js-plot-tools.js",
+    "watch": "esbuild src/index.js --bundle --outfile=dist/js-plot-tools.js --minify --platform=node --watch",
+    "build": "esbuild src/index.js --bundle --outfile=dist/js-plot-tools.js --minify --platform=node",
     "test": "jest"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "uglifyify": "^5.0.2"
-  }
+  "license": "ISC"
 }
