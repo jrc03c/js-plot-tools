@@ -10,6 +10,7 @@
         const instructions = await response.json()
         plot.instructions = instructions
         plot.show()
+        fetch("/quit")
       }
     </script>
   </body>

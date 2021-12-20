@@ -57,7 +57,12 @@ class Plot {
         return response.send(JSON.stringify(self.instructions))
       })
 
-      app.listen(12345, () => {
+      app.get("/quit", (request, response) => {
+        response.send(null)
+        process.exit(0)
+      })
+
+      const listener = app.listen(12345, () => {
         fs.copyFileSync("dist/js-plot-tools.js", "src/public/js-plot-tools.js")
         exec(`xdg-open http://localhost:12345`)
       })
