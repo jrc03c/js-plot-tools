@@ -59,7 +59,7 @@ class Plot {
 
       app.get("/quit", (request, response) => {
         response.send(null)
-        process.exit(0)
+        listener.close()
       })
 
       const listener = app.listen(12345, () => {
