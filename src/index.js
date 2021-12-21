@@ -2,6 +2,10 @@ function isInBrowser() {
   return typeof window !== "undefined"
 }
 
+function valueMap(x, a, b, c, d) {
+  return ((d - c) * (x - a)) / (b - a) + c
+}
+
 class Plot {
   static NODE_MODE = "node-mode"
   static BROWSER_MODE = "browser-mode"
@@ -10,6 +14,21 @@ class Plot {
     const self = this
     self.instructions = []
     self.mode = isInBrowser() ? Plot.BROWSER_MODE : Plot.NODE_MODE
+    self.left = -1
+    self.right = 1
+    self.top = 1
+    self.bottom = -1
+  }
+
+  setBounds(xmin, xmax, ymin, ymax) {
+    const self = this
+
+    self.instructions.push({
+      action: "set-bounds",
+      data: { xmin, xmax, ymin, ymax },
+    })
+
+    return self
   }
 
   scatter(x, y) {
@@ -34,14 +53,62 @@ class Plot {
     if (self.mode === Plot.BROWSER_MODE) {
       const width = 800
       const height = 600
+      const padding = width / 10
       const canvas = document.createElement("canvas")
       canvas.width = width
       canvas.height = height
       document.body.appendChild(canvas)
 
       const context = canvas.getContext("2d")
-      context.fillStyle = "red"
+      context.fillStyle = "rgb(245, 245, 245)"
       context.fillRect(0, 0, width, height)
+
+      let lastAngle = 0
+      const angleStep = 100
+
+      self.instructions.forEach(instruction => {
+        // bounds-setting instructions
+        if (instruction.action === "set-bounds") {
+          self.left = instruction.data.xmin
+          self.right = instruction.data.xmax
+          self.bottom = instruction.data.ymin
+          self.top = instruction.data.ymax
+        }
+
+        // drawing instructions
+        else if (instruction.action === "draw") {
+          if (instruction.type === "scatter") {
+            context.fillStyle = `hsl(${lastAngle}deg, 100%, 50%)`
+            lastAngle += angleStep
+
+            const x = instruction.data.x.map(v => {
+              return valueMap(
+                v,
+                self.left,
+                self.right,
+                padding,
+                width - padding
+              )
+            })
+
+            const y = instruction.data.y.map(v => {
+              return valueMap(
+                v,
+                self.bottom,
+                self.top,
+                height - padding,
+                padding
+              )
+            })
+
+            for (let i = 0; i < x.length; i++) {
+              context.beginPath()
+              context.arc(x[i], y[i], 2, 0, Math.PI * 2, false)
+              context.fill()
+            }
+          }
+        }
+      })
     }
 
     // node mode
