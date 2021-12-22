@@ -25,6 +25,7 @@ class BrowserPlotter extends AbstractPlotter {
     plot.instructions = obj.instructions
     plot.shouldDrawAxes = obj.shouldDrawAxes
     plot.shouldSetBoundsAutomatically = obj.shouldSetBoundsAutomatically
+    plot.padding = obj.padding
     return plot
   }
 
@@ -32,7 +33,6 @@ class BrowserPlotter extends AbstractPlotter {
     const self = this
 
     const { width, height } = self.element.getBoundingClientRect()
-    const padding = width / 10
     const canvas = document.createElement("canvas")
     canvas.width = width
     canvas.height = height
@@ -74,10 +74,11 @@ class BrowserPlotter extends AbstractPlotter {
 
     // draw axes
     if (self.shouldDrawAxes) {
+      console.log("drawing axes...")
       context.strokeStyle = "black"
-      context.lineWidth = 1
+      context.lineWidth = 2
 
-      const x = valueMap(
+      const xZero = valueMap(
         0,
         self.left,
         self.right,
@@ -85,7 +86,7 @@ class BrowserPlotter extends AbstractPlotter {
         width - self.padding
       )
 
-      const y = valueMap(
+      const yZero = valueMap(
         0,
         self.bottom,
         self.top,
@@ -94,12 +95,16 @@ class BrowserPlotter extends AbstractPlotter {
       )
 
       context.beginPath()
-      context.moveTo(x, padding)
-      context.lineTo(x, height - padding)
-      context.moveTo(padding, y)
-      context.lineTo(width - padding, y)
+      context.moveTo(xZero, self.padding)
+      context.lineTo(xZero, height - self.padding)
+      context.moveTo(self.padding, yZero)
+      context.lineTo(width - self.padding, yZero)
       context.stroke()
     }
+
+    // set colors
+    let lastAngle = 0
+    const angleStep = 110
 
     // run all instructions
     self.instructions.forEach(instruction => {
@@ -107,6 +112,34 @@ class BrowserPlotter extends AbstractPlotter {
       if (instruction.action === "draw") {
         // scatter plots
         if (instruction.type === "scatter") {
+          context.fillStyle = `hsl(${lastAngle}deg, 100%, 50%)`
+          lastAngle += angleStep
+
+          const x = instruction.data.x.map(v => {
+            return valueMap(
+              v,
+              self.left,
+              self.right,
+              self.padding,
+              width - self.padding
+            )
+          })
+
+          const y = instruction.data.y.map(v => {
+            return valueMap(
+              v,
+              self.bottom,
+              self.top,
+              height - self.padding,
+              self.padding
+            )
+          })
+
+          for (let i = 0; i < x.length; i++) {
+            context.beginPath()
+            context.arc(x[i], y[i], 2, 0, Math.PI * 2, false)
+            context.fill()
+          }
         }
       }
     })

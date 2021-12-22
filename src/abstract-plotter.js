@@ -4,6 +4,7 @@ class AbstractPlotter {
     self.instructions = []
     self.shouldDrawAxes = true
     self.shouldSetBoundsAutomatically = true
+    self.padding = 0
   }
 
   dehydrate() {
