@@ -78,7 +78,6 @@ class BrowserPlotter extends AbstractPlotter {
 
     // draw axes
     if (self.shouldDrawAxes) {
-      console.log("drawing axes...")
       context.strokeStyle = "black"
       context.lineWidth = 2
 
@@ -144,6 +143,42 @@ class BrowserPlotter extends AbstractPlotter {
             context.arc(x[i], y[i], 2, 0, Math.PI * 2, false)
             context.fill()
           }
+        }
+
+        // line plots
+        else if (instruction.type === "line") {
+          context.strokeStyle = `hsl(${lastAngle}deg, 100%, 50%)`
+          context.lineWidth = 2
+          lastAngle += angleStep
+
+          const x = instruction.data.x.map(v => {
+            return valueMap(
+              v,
+              self.left,
+              self.right,
+              self.padding,
+              width - self.padding
+            )
+          })
+
+          const y = instruction.data.y.map(v => {
+            return valueMap(
+              v,
+              self.bottom,
+              self.top,
+              height - self.padding,
+              self.padding
+            )
+          })
+
+          context.beginPath()
+
+          for (let i = 0; i < x.length - 1; i++) {
+            context.moveTo(x[i], y[i])
+            context.lineTo(x[i + 1], y[i + 1])
+          }
+
+          context.stroke()
         }
       }
     })

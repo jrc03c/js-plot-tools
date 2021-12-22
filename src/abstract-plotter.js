@@ -42,6 +42,18 @@ class AbstractPlotter {
     return self
   }
 
+  line(x, y) {
+    const self = this
+
+    self.instructions.push({
+      action: "draw",
+      type: "line",
+      data: { x, y },
+    })
+
+    return self
+  }
+
   show() {
     throw new Error("The `show` method must be overridden in a concrete class!")
   }
