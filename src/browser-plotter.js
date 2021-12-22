@@ -42,6 +42,10 @@ class BrowserPlotter extends AbstractPlotter {
     context.fillStyle = "rgb(245, 245, 245)"
     context.fillRect(0, 0, width, height)
 
+    if (self.instructions.length === 0) {
+      return self
+    }
+
     // set bounds automatically
     if (self.shouldSetBoundsAutomatically) {
       const drawInstructions = self.instructions.filter(

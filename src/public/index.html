@@ -14,10 +14,13 @@
     <script src="js-plot-tools.js"></script>
     <script>
       window.onload = async function () {
-        const response = await fetch("/get-dehydrated-plotter")
-        const obj = await response.json()
-        const plot = Plotter.hydrate(obj)
-        plot.show()
+        try {
+          const response = await fetch("/get-dehydrated-plotter")
+          const obj = await response.json()
+          const plot = Plotter.hydrate(obj)
+          plot.show()
+        } catch (e) {}
+
         fetch("/quit")
       }
     </script>
