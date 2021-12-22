@@ -1,2 +1,9 @@
 const NodePlotter = require("./node-plotter.js")
-module.exports = new NodePlotter()
+
+module.exports = {
+  plot: new NodePlotter(),
+
+  dump() {
+    global["plot"] = new NodePlotter()
+  },
+}
