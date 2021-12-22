@@ -7,6 +7,12 @@ class AbstractPlotter {
     self.padding = 0
   }
 
+  clear() {
+    const self = this
+    self.instructions = []
+    return self
+  }
+
   dehydrate() {
     const self = this
     return JSON.stringify(self)
