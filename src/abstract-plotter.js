@@ -3,10 +3,17 @@ class AbstractPlotter {
     const self = this
     self.instructions = []
     self.shouldDrawAxes = true
+    self.shouldSetBoundsAutomatically = true
+  }
+
+  dehydrate() {
+    const self = this
+    return JSON.stringify(self)
   }
 
   setBounds(xmin, xmax, ymin, ymax) {
     const self = this
+    self.shouldSetBoundsAutomatically = false
 
     self.instructions.push({
       action: "set-bounds",

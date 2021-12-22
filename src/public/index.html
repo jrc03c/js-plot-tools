@@ -14,9 +14,9 @@
     <script src="js-plot-tools.js"></script>
     <script>
       window.onload = async function () {
-        const response = await fetch("/get-instructions")
-        const instructions = await response.json()
-        plot.instructions = instructions
+        const response = await fetch("/get-dehydrated-plotter")
+        const obj = await response.json()
+        const plot = Plotter.hydrate(obj)
         plot.show()
         fetch("/quit")
       }

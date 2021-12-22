@@ -14,8 +14,8 @@ class NodePlotter extends AbstractPlotter {
 
     app.use("/", express.static("src/public", { extensions: ["html"] }))
 
-    app.get("/get-instructions", (request, response) => {
-      return response.send(JSON.stringify(self.instructions))
+    app.get("/get-dehydrated-plotter", (request, response) => {
+      return response.send(self.dehydrate())
     })
 
     app.get("/quit", (request, response) => {
