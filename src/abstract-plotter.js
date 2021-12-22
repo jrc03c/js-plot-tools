@@ -1,10 +1,13 @@
+const { linspace } = require("./utils.js")
+const { min, max } = require("@jrc03c/js-math-tools")
+
 class AbstractPlotter {
   constructor() {
     const self = this
     self.instructions = []
     self.shouldDrawAxes = true
     self.shouldSetBoundsAutomatically = true
-    self.padding = 0
+    self.padding = 25
   }
 
   clear() {
@@ -48,6 +51,27 @@ class AbstractPlotter {
     self.instructions.push({
       action: "draw",
       type: "line",
+      data: { x, y },
+    })
+
+    return self
+  }
+
+  hist(values, bins) {
+    const self = this
+    bins = bins || 20
+
+    const x = linspace(min(values), max(values), bins)
+    const y = []
+
+    for (let i = 0; i < x.length - 1; i++) {
+      const count = values.filter(v => v >= x[i] && v < x[i + 1]).length
+      y.push(count)
+    }
+
+    self.instructions.push({
+      action: "draw",
+      type: "hist",
       data: { x, y },
     })
 

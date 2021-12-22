@@ -1,9 +1,6 @@
 const AbstractPlotter = require("./abstract-plotter.js")
 const { min, max } = require("@jrc03c/js-math-tools")
-
-function valueMap(x, a, b, c, d) {
-  return ((d - c) * (x - a)) / (b - a) + c
-}
+const { valueMap } = require("./utils.js")
 
 class BrowserPlotter extends AbstractPlotter {
   constructor(element) {
@@ -48,9 +45,20 @@ class BrowserPlotter extends AbstractPlotter {
 
     // set bounds automatically
     if (self.shouldSetBoundsAutomatically) {
-      const drawInstructions = self.instructions.filter(
-        i => i.action === "draw"
-      )
+      const drawInstructions = self.instructions
+        .filter(i => i.action === "draw")
+        .map(i => {
+          if (i.type === "hist") {
+            return {
+              data: {
+                x: i.data.x,
+                y: [0, max(i.data.y)],
+              },
+            }
+          } else {
+            return i
+          }
+        })
 
       const allXValues = drawInstructions.map(i => i.data.x || [])
       const allYValues = drawInstructions.map(i => i.data.y || [])
@@ -115,7 +123,7 @@ class BrowserPlotter extends AbstractPlotter {
       if (instruction.action === "draw") {
         // scatter plots
         if (instruction.type === "scatter") {
-          context.fillStyle = `hsl(${lastAngle}deg, 100%, 50%)`
+          context.fillStyle = `hsl(${lastAngle}deg, 100%, 33%)`
           lastAngle += angleStep
 
           const x = instruction.data.x.map(v => {
@@ -179,6 +187,33 @@ class BrowserPlotter extends AbstractPlotter {
           }
 
           context.stroke()
+        }
+
+        // histograms
+        else if (instruction.type === "hist") {
+          context.fillStyle = `hsl(${lastAngle}deg, 100%, 50%)`
+          lastAngle += angleStep
+          const w = (width - 2 * self.padding) / instruction.data.x.length
+
+          for (let i = 0; i < instruction.data.x.length; i++) {
+            const x = valueMap(
+              instruction.data.x[i],
+              self.left,
+              self.right,
+              self.padding,
+              width - self.padding
+            )
+
+            const h = valueMap(
+              instruction.data.y[i],
+              0,
+              max(instruction.data.y),
+              0,
+              height - 2 * self.padding
+            )
+
+            context.fillRect(x, height - self.padding - h, w, h)
+          }
         }
       }
     })
