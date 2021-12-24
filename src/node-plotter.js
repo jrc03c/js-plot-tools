@@ -25,7 +25,7 @@ class NodePlotter extends AbstractPlotter {
 
     const listener = app.listen(12345, () => {
       fs.copyFileSync("dist/js-plot-tools.js", "src/public/js-plot-tools.js")
-      exec(`xdg-open http://localhost:12345`)
+      exec(`firefox --private http://localhost:12345`)
     })
 
     return self

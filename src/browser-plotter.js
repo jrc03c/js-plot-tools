@@ -1,6 +1,50 @@
 const AbstractPlotter = require("./abstract-plotter.js")
-const { min, max } = require("@jrc03c/js-math-tools")
 const { valueMap } = require("./utils.js")
+const {
+  min,
+  max,
+  log,
+  pow,
+  floor,
+  ceil,
+  range,
+  abs,
+  clamp,
+} = require("@jrc03c/js-math-tools")
+
+function getTickSize(xrange) {
+  const xpow10 = floor(log(abs(xrange)) / log(10))
+  const a = pow(10, xpow10)
+  const b = a / 2
+  const c = b / 2
+
+  let closest = a
+  let score = Infinity
+  const options = [a, b, c]
+
+  options.forEach(v => {
+    const s = pow(xrange / v - 10, 2)
+
+    if (s < score) {
+      score = s
+      closest = v
+    }
+  })
+
+  return closest
+}
+
+function getMultiplesOfXBetweenAAndB(x, a, b) {
+  if (b < a) {
+    const buffer = a
+    a = b
+    b = buffer
+  }
+
+  const start = ceil(a / x) * x
+  const stop = floor(b / x) * x
+  return range(start - x, stop + x * 2, x).filter(v => v !== 0)
+}
 
 class BrowserPlotter extends AbstractPlotter {
   constructor(element) {
@@ -21,6 +65,7 @@ class BrowserPlotter extends AbstractPlotter {
     const plot = new BrowserPlotter()
     plot.instructions = obj.instructions
     plot.shouldDrawAxes = obj.shouldDrawAxes
+    plot.shouldDrawAxisTicks = obj.shouldDrawAxisTicks
     plot.shouldSetBoundsAutomatically = obj.shouldSetBoundsAutomatically
     plot.padding = obj.padding
     return plot
@@ -43,26 +88,27 @@ class BrowserPlotter extends AbstractPlotter {
       return self
     }
 
+    // get all points (for bounds setting and tick mark drawing)
+    const drawInstructions = self.instructions
+      .filter(i => i.action === "draw")
+      .map(i => {
+        if (i.type === "hist") {
+          return {
+            data: {
+              x: i.data.x,
+              y: [0, max(i.data.y)],
+            },
+          }
+        } else {
+          return i
+        }
+      })
+
+    const allXValues = drawInstructions.map(i => i.data.x || [])
+    const allYValues = drawInstructions.map(i => i.data.y || [])
+
     // set bounds automatically
     if (self.shouldSetBoundsAutomatically) {
-      const drawInstructions = self.instructions
-        .filter(i => i.action === "draw")
-        .map(i => {
-          if (i.type === "hist") {
-            return {
-              data: {
-                x: i.data.x,
-                y: [0, max(i.data.y)],
-              },
-            }
-          } else {
-            return i
-          }
-        })
-
-      const allXValues = drawInstructions.map(i => i.data.x || [])
-      const allYValues = drawInstructions.map(i => i.data.y || [])
-
       self.left = min(allXValues)
       self.right = max(allXValues)
       self.bottom = min(allYValues)
@@ -111,6 +157,87 @@ class BrowserPlotter extends AbstractPlotter {
       context.moveTo(self.padding, yZero)
       context.lineTo(width - self.padding, yZero)
       context.stroke()
+
+      if (self.shouldDrawAxisTicks) {
+        const xmin = min(allXValues)
+        const xmax = max(allXValues)
+        const xrange = xmax - xmin
+
+        const xtick = getTickSize(xrange)
+        const xticks = getMultiplesOfXBetweenAAndB(xtick, xmin, xmax)
+
+        const ymin = min(allYValues)
+        const ymax = max(allYValues)
+        const yrange = ymax - ymin
+
+        const ytick = getTickSize(yrange)
+        const yticks = getMultiplesOfXBetweenAAndB(ytick, ymin, ymax)
+
+        context.fillStyle = "black"
+        context.font = "10px monospace"
+        context.textAlign = "center"
+        context.textBaseline = "middle"
+
+        xticks.forEach(tick => {
+          const x = valueMap(
+            tick,
+            self.left,
+            self.right,
+            self.padding,
+            width - self.padding
+          )
+
+          const y = clamp(
+            valueMap(
+              0,
+              self.bottom,
+              self.top,
+              height - self.padding,
+              self.padding
+            ),
+            self.padding,
+            height - self.padding
+          )
+
+          context.beginPath()
+          context.moveTo(x, y - 4)
+          context.lineTo(x, y + 4)
+          context.stroke()
+
+          context.fillText(tick.toString(), x, y - 10)
+        })
+
+        context.textAlign = "left"
+
+        yticks.forEach(tick => {
+          const x = clamp(
+            valueMap(
+              0,
+              self.left,
+              self.right,
+              self.padding,
+              width - self.padding
+            ),
+            self.padding,
+            width - self.padding
+          )
+
+          const y = valueMap(
+            tick,
+            self.bottom,
+            self.top,
+            height - self.padding,
+            self.padding
+          )
+
+          context.beginPath()
+          context.moveTo(x - 4, y)
+          context.lineTo(x + 4, y)
+          context.stroke()
+
+          context.fillText(tick.toString(), x + 10, y)
+        })
+      }
     }
 
     // set colors

@@ -6,6 +6,7 @@ class AbstractPlotter {
     const self = this
     self.instructions = []
     self.shouldDrawAxes = true
+    self.shouldDrawAxisTicks = true
     self.shouldSetBoundsAutomatically = true
     self.padding = 25
   }
