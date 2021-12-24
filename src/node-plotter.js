@@ -1,7 +1,15 @@
 const AbstractPlotter = require("./abstract-plotter.js")
 const fs = require("fs")
 const { exec } = require("child_process")
-const express = require("express")
+const path = require("path")
+const makeKey = require("@jrc03c/make-key")
+const tempDir = path.join(__dirname, "temp")
+
+if (fs.existsSync(tempDir)) {
+  fs.rmSync(tempDir, { recursive: true, force: true })
+}
+
+fs.mkdirSync(tempDir)
 
 class NodePlotter extends AbstractPlotter {
   constructor() {
@@ -10,23 +18,25 @@ class NodePlotter extends AbstractPlotter {
 
   show() {
     const self = this
-    const app = express()
 
-    app.use("/", express.static("src/public", { extensions: ["html"] }))
+    const template = fs.readFileSync(
+      path.join(__dirname, "public/index.html"),
+      "utf8"
+    )
 
-    app.get("/get-dehydrated-plotter", (request, response) => {
-      return response.send(self.dehydrate())
-    })
+    const minifiedScript = fs.readFileSync(
+      path.join(__dirname, "../dist/js-plot-tools.js"),
+      "utf8"
+    )
 
-    app.get("/quit", (request, response) => {
-      response.send(null)
-      listener.close()
-    })
+    const out = template
+      .replace("<% minified-script %>", minifiedScript)
+      .replace("<% obj %>", self.dehydrate())
 
-    const listener = app.listen(12345, () => {
-      fs.copyFileSync("dist/js-plot-tools.js", "src/public/js-plot-tools.js")
-      exec(`firefox --private http://localhost:12345`)
-    })
+    const key = makeKey(8)
+    const outfile = path.join(tempDir, `${key}.html`)
+    fs.writeFileSync(outfile, out, "utf8")
+    exec(`xdg-open file://${outfile} &`)
 
     return self
   }

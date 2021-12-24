@@ -11,17 +11,16 @@
     </style>
   </head>
   <body>
-    <script src="js-plot-tools.js"></script>
+    <script>
+      <% minified-script %>
+    </script>
     <script>
       window.onload = async function () {
         try {
-          const response = await fetch("/get-dehydrated-plotter")
-          const obj = await response.json()
+          const obj = <% obj %>
           const plot = Plotter.hydrate(obj)
           plot.show()
         } catch (e) {}
-
-        fetch("/quit")
       }
     </script>
   </body>
