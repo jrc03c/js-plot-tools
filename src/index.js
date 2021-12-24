@@ -1,9 +1,14 @@
 const NodePlotter = require("./node-plotter.js")
+const BrowserPlotter = require("./browser-plotter.js")
 
-module.exports = {
-  plot: new NodePlotter(),
+if (typeof module !== "undefined") {
+  module.exports = {
+    BrowserPlotter,
+    NodePlotter,
+  }
+}
 
-  dump() {
-    global["plot"] = new NodePlotter()
-  },
+if (typeof window !== "undefined") {
+  window["plot"] = new BrowserPlotter()
+  window["Plotter"] = BrowserPlotter
 }

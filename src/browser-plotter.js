@@ -318,9 +318,19 @@ class BrowserPlotter extends AbstractPlotter {
 
         // histograms
         else if (instruction.type === "hist") {
-          context.fillStyle = `hsl(${lastAngle}deg, 100%, 50%)`
+          context.fillStyle = `hsla(${lastAngle}deg, 100%, 50%, 0.5)`
+          context.strokeStyle = "black"
           lastAngle += angleStep
-          const w = (width - 2 * self.padding) / instruction.data.x.length
+
+          const w = valueMap(
+            instruction.data.x[1] - instruction.data.x[0],
+            0,
+            self.right - self.left,
+            0,
+            width - 2 * self.padding
+          )
+
+          console.log("w:", w)
 
           for (let i = 0; i < instruction.data.x.length; i++) {
             const x = valueMap(
@@ -340,6 +350,7 @@ class BrowserPlotter extends AbstractPlotter {
             )
 
             context.fillRect(x, height - self.padding - h, w, h)
+            context.strokeRect(x, height - self.padding - h, w, h)
           }
         }
       }

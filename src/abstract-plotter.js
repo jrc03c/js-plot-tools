@@ -1,5 +1,4 @@
-const { linspace } = require("./utils.js")
-const { min, max } = require("@jrc03c/js-math-tools")
+const { min, max, range } = require("@jrc03c/js-math-tools")
 
 class AbstractPlotter {
   constructor() {
@@ -62,11 +61,15 @@ class AbstractPlotter {
     const self = this
     bins = bins || 20
 
-    const x = linspace(min(values), max(values), bins)
+    const xmin = min(values)
+    const xmax = max(values)
+    const xrange = xmax - xmin
+    const xstep = xrange / bins
+    const x = range(xmin, xmax, xstep)
     const y = []
 
-    for (let i = 0; i < x.length - 1; i++) {
-      const count = values.filter(v => v >= x[i] && v < x[i + 1]).length
+    for (let i = 0; i < x.length; i++) {
+      const count = values.filter(v => v >= x[i] && v < x[i] + xstep).length
       y.push(count)
     }
 

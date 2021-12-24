@@ -1,1 +1,2 @@
-require(__dirname).dump()
+const { NodePlotter } = require(__dirname)
+global["plot"] = new NodePlotter()
