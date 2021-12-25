@@ -112,6 +112,12 @@ const plot = new NodePlotter()
 // ...
 ```
 
+More often, though, you'll import either the `Plotter` (which is just a renamed `NodePlotter` class) class or the `plot` object (which is an instance of the `Plotter` class), like:
+
+```js
+const { plot, Plotter } = require("@jrc03c/js-plot-tools")
+```
+
 ### Methods
 
 #### `.show()`
