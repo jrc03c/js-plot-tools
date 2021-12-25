@@ -59,6 +59,11 @@ class BrowserPlotter extends AbstractPlotter {
     } else {
       self.element = document.body
     }
+
+    self.left = -1
+    self.right = 1
+    self.bottom = -1
+    self.top = 1
   }
 
   static hydrate(obj) {

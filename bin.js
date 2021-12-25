@@ -1,2 +1,2 @@
-const { NodePlotter } = require(__dirname)
-global["plot"] = new NodePlotter()
+const { plot } = require(__dirname)
+global.plot = plot
