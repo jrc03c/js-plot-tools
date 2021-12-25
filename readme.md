@@ -177,3 +177,33 @@ To clarify, you don't have to use both `NodePlotter` and `BrowserPlotter` in con
 Overrides the `AbstractPlotter.show()` method. It executes all of the instructions in the `.instructions` list.
 
 There's an important thing to keep in mind here: the dimensions of the plot will match the dimensions of `.element`, which will be retrieved when `.show()` is called. If `.element` represents an empty, unstyled element, then your plot may end up having a height of 0, in which case it won't be visible. The solution is to give `.element` some width and height via CSS _before_ calling the `.show()` method.
+
+### Examples
+
+```html
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      #plot {
+        width: 640px;
+        height: 480px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="plot"></div>
+
+    <script src="path/to/dist/js-plot-tools.js"></script>
+    <script src="path/to/dist/js-math-tools.js"></script>
+    <script>
+      const { range, sin } = JSMathTools
+      const plot = new Plotter("#plot")
+      const x = range(-Math.PI * 2, Math.PI * 2, 0.01)
+      const y = sin(x)
+      plot.line(x, y)
+      plot.show()
+    </script>
+  </body>
+</html>
+```
