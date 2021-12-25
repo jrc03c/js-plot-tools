@@ -170,6 +170,8 @@ const plot2 = Plotter.hydrate(plot1.dehydrate())
 
 Normally, though, you wouldn't dehydrate a `BrowserPlotter` instance and then rehydrate it. Instead, the usual workflow is that you'd dehydrate a `NodePlotter` instance, save that stringified data somewhere, load that data into the browser, and then use `Plotter.hydrate(obj)` (keeping in mind that `BrowserPlotter` is just called `Plotter` in the browser!) to return a plotter instance that has the same properties as the `NodePlotter` instance.
 
+To clarify, you don't have to use both `NodePlotter` and `BrowserPlotter` in conjunction; they can be used independently of each other (though, of course, `NodePlotter` secretly relies on `BrowserPlotter`).
+
 #### `.show()`
 
 Overrides the `AbstractPlotter.show()` method. It executes all of the instructions in the `.instructions` list.
