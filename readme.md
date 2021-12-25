@@ -161,7 +161,7 @@ Defines the top-most possible value to be drawn on the _y_-axis. By default, it'
 
 #### `.hydrate(obj)` (static)
 
-This method returns a `BrowserPlotter` given a previously dehydrated plotter instance. For example (in the browser):
+This static method returns a `BrowserPlotter` given a previously dehydrated plotter instance. For example (in the browser):
 
 ```js
 const plot1 = new Plotter()
