@@ -1,4 +1,4 @@
-const { min, max, range } = require("@jrc03c/js-math-tools")
+const { min, max, range, MathError } = require("@jrc03c/js-math-tools")
 
 class AbstractPlotter {
   constructor() {
@@ -83,7 +83,9 @@ class AbstractPlotter {
   }
 
   show() {
-    throw new Error("The `show` method must be overridden in a concrete class!")
+    throw new MathError(
+      "The `show` method must be overridden in a concrete class!"
+    )
   }
 }
 
