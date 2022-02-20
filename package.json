@@ -5,8 +5,7 @@
   "main": "src/index.js",
   "dependencies": {
     "@jrc03c/js-math-tools": "git+https://github.com/jrc03c/js-math-tools.git",
-    "@jrc03c/make-key": "github:jrc03c/make-key",
-    "esbuild": "^0.14.6"
+    "@jrc03c/make-key": "github:jrc03c/make-key"
   },
   "scripts": {
     "watch": "esbuild src/browser-plotter.js --bundle --outfile=dist/js-plot-tools.js --minify --watch",
@@ -15,5 +14,8 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.14.23"
+  }
 }
