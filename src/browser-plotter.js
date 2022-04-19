@@ -135,6 +135,16 @@ class BrowserPlotter extends AbstractPlotter {
       self.top = instruction.data.ymax
     }
 
+    if (self.left === self.right) {
+      self.left -= 1
+      self.right += 1
+    }
+
+    if (self.top === self.bottom) {
+      self.top += 1
+      self.bottom -= 1
+    }
+
     // draw axes
     if (self.shouldDrawAxes) {
       context.strokeStyle = "black"
@@ -164,15 +174,15 @@ class BrowserPlotter extends AbstractPlotter {
       context.stroke()
 
       if (self.shouldDrawAxisTicks) {
-        const xmin = min(allXValues)
-        const xmax = max(allXValues)
+        const xmin = self.left
+        const xmax = self.right
         const xrange = xmax - xmin
 
         const xtick = getTickSize(xrange)
         const xticks = getMultiplesOfXBetweenAAndB(xtick, xmin, xmax)
 
-        const ymin = min(allYValues)
-        const ymax = max(allYValues)
+        const ymin = self.bottom
+        const ymax = self.top
         const yrange = ymax - ymin
 
         const ytick = getTickSize(yrange)
