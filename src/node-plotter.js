@@ -37,7 +37,7 @@ class NodePlotter extends AbstractPlotter {
     const outfile = path.join(tempDir, `${key}.html`)
     fs.writeFileSync(outfile, out, "utf8")
 
-    exec(`xdg-open file://${outfile}`, (error, stdout, stderr) => {
+    exec(`xdg-open "file://${outfile}"`, (error, stdout, stderr) => {
       if (error) console.log(error)
       if (stderr.trim().length > 0) console.log(stderr)
       console.log(stdout)
