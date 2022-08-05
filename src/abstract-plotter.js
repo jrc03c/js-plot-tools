@@ -1,4 +1,4 @@
-const { min, max, range, MathError } = require("@jrc03c/js-math-tools")
+const { MathError, max, min, range } = require("@jrc03c/js-math-tools")
 
 class AbstractPlotter {
   constructor() {

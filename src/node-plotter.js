@@ -1,8 +1,9 @@
+const { exec } = require("child_process")
 const AbstractPlotter = require("./abstract-plotter.js")
 const fs = require("fs")
-const { exec } = require("child_process")
-const path = require("path")
 const makeKey = require("@jrc03c/make-key")
+const path = require("path")
+
 const tempDir = path.join(__dirname, "temp")
 
 if (fs.existsSync(tempDir)) {

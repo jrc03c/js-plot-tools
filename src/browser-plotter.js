@@ -1,16 +1,17 @@
-const AbstractPlotter = require("./abstract-plotter.js")
-const { valueMap } = require("./utils.js")
 const {
-  min,
-  max,
-  log,
-  pow,
-  floor,
-  ceil,
-  range,
   abs,
+  ceil,
   clamp,
+  floor,
+  log,
+  max,
+  min,
+  pow,
+  range,
+  remap,
 } = require("@jrc03c/js-math-tools")
+
+const AbstractPlotter = require("./abstract-plotter.js")
 
 function getTickSize(xrange) {
   const xpow10 = floor(log(abs(xrange)) / log(10))
@@ -150,7 +151,7 @@ class BrowserPlotter extends AbstractPlotter {
       context.strokeStyle = "black"
       context.lineWidth = 2
 
-      const xZero = valueMap(
+      const xZero = remap(
         0,
         self.left,
         self.right,
@@ -158,7 +159,7 @@ class BrowserPlotter extends AbstractPlotter {
         width - self.padding
       )
 
-      const yZero = valueMap(
+      const yZero = remap(
         0,
         self.bottom,
         self.top,
@@ -194,7 +195,7 @@ class BrowserPlotter extends AbstractPlotter {
         context.textBaseline = "middle"
 
         xticks.forEach(tick => {
-          const x = valueMap(
+          const x = remap(
             tick,
             self.left,
             self.right,
@@ -203,7 +204,7 @@ class BrowserPlotter extends AbstractPlotter {
           )
 
           const y = clamp(
-            valueMap(
+            remap(
               0,
               self.bottom,
               self.top,
@@ -226,18 +227,12 @@ class BrowserPlotter extends AbstractPlotter {
 
         yticks.forEach(tick => {
           const x = clamp(
-            valueMap(
-              0,
-              self.left,
-              self.right,
-              self.padding,
-              width - self.padding
-            ),
+            remap(0, self.left, self.right, self.padding, width - self.padding),
             self.padding,
             width - self.padding
           )
 
-          const y = valueMap(
+          const y = remap(
             tick,
             self.bottom,
             self.top,
@@ -269,7 +264,7 @@ class BrowserPlotter extends AbstractPlotter {
           lastAngle += angleStep
 
           const x = instruction.data.x.map(v => {
-            return valueMap(
+            return remap(
               v,
               self.left,
               self.right,
@@ -279,7 +274,7 @@ class BrowserPlotter extends AbstractPlotter {
           })
 
           const y = instruction.data.y.map(v => {
-            return valueMap(
+            return remap(
               v,
               self.bottom,
               self.top,
@@ -302,7 +297,7 @@ class BrowserPlotter extends AbstractPlotter {
           lastAngle += angleStep
 
           const x = instruction.data.x.map(v => {
-            return valueMap(
+            return remap(
               v,
               self.left,
               self.right,
@@ -312,7 +307,7 @@ class BrowserPlotter extends AbstractPlotter {
           })
 
           const y = instruction.data.y.map(v => {
-            return valueMap(
+            return remap(
               v,
               self.bottom,
               self.top,
@@ -337,7 +332,7 @@ class BrowserPlotter extends AbstractPlotter {
           context.strokeStyle = "black"
           lastAngle += angleStep
 
-          const w = valueMap(
+          const w = remap(
             instruction.data.x[1] - instruction.data.x[0],
             0,
             self.right - self.left,
@@ -348,7 +343,7 @@ class BrowserPlotter extends AbstractPlotter {
           console.log("w:", w)
 
           for (let i = 0; i < instruction.data.x.length; i++) {
-            const x = valueMap(
+            const x = remap(
               instruction.data.x[i],
               self.left,
               self.right,
@@ -356,7 +351,7 @@ class BrowserPlotter extends AbstractPlotter {
               width - self.padding
             )
 
-            const h = valueMap(
+            const h = remap(
               instruction.data.y[i],
               0,
               max(instruction.data.y),

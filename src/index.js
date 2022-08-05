@@ -1,5 +1,5 @@
-const NodePlotter = require("./node-plotter.js")
 const BrowserPlotter = require("./browser-plotter.js")
+const NodePlotter = require("./node-plotter.js")
 
 if (typeof module !== "undefined") {
   module.exports = {
