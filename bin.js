@@ -1,3 +1,3 @@
 const { plot } = require(__dirname)
-plot.setBrowserCommand("firefox $FILE")
+plot.browserCommand = "firefox $FILE"
 global.plot = plot
