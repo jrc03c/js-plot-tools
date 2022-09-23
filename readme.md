@@ -118,6 +118,20 @@ More often, though, you'll import either the `Plotter` class (which is just a re
 const { plot, Plotter } = require("@jrc03c/js-plot-tools")
 ```
 
+### Properties
+
+#### `.browserCommand`
+
+The `browserCommand` is the thing that will be run when you call `plot.show()` on a `NodePlotter` object. By default, it's `"xdg-open $FILE"`, which means that the operating system will be asked to use its default tool for handling HTML files. But if you wanted to set the command to something more specific (e.g., to have the file opened specifically with Firefox), you could do this:
+
+```js
+const { NodePlotter } = require("@jrc03c/js-plot-tools/src/node-plotter.js")
+const plot = new NodePlotter()
+plot.browserCommand = "firefox $FILE"
+```
+
+You don't need to replace `$FILE` yourself; it's automatically replaced with the path of the HTML file that the plotter generates.
+
 ### Methods
 
 #### `.show()`
