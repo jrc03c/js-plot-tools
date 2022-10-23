@@ -105,6 +105,13 @@ class BrowserPlotter extends AbstractPlotter {
               y: [0, max(i.data.y)],
             },
           }
+        } else if (i.type === "bar") {
+          return {
+            data: {
+              x: i.data.x,
+              y: [0, max(i.data.heights)],
+            },
+          }
         } else {
           return i
         }
@@ -358,6 +365,44 @@ class BrowserPlotter extends AbstractPlotter {
               0,
               height - 2 * self.padding
             )
+
+            context.fillRect(x, height - self.padding - h, w, h)
+            context.strokeRect(x, height - self.padding - h, w, h)
+          }
+        }
+
+        // bar charts
+        else if (instruction.type === "bar") {
+          context.fillStyle = `hsla(${lastAngle}deg, 100%, 50%, 0.5)`
+          context.strokeStyle = "black"
+          lastAngle += angleStep
+
+          for (let i = 0; i < instruction.data.x.length; i++) {
+            const x = remap(
+              instruction.data.x[i],
+              self.left,
+              self.right,
+              self.padding,
+              width - self.padding
+            )
+
+            const h = remap(
+              instruction.data.heights[i],
+              0,
+              max(instruction.data.heights),
+              0,
+              height - 2 * self.padding
+            )
+
+            const w = remap(
+              1 / instruction.data.x.length,
+              0,
+              1,
+              0,
+              width - 2 * self.padding
+            )
+
+            console.log(x, h, w)
 
             context.fillRect(x, height - self.padding - h, w, h)
             context.strokeRect(x, height - self.padding - h, w, h)

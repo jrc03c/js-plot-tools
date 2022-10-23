@@ -82,6 +82,25 @@ class AbstractPlotter {
     return self
   }
 
+  bar(labels, heights){
+    const self = this
+    let x
+
+    if (labels.some(v => typeof(v) === "string")){
+      x = range(1, labels.length + 1)
+    } else {
+      x = labels.slice()
+    }
+
+    self.instructions.push({
+      action: "draw",
+      type: "bar",
+      data: {x, labels, heights},
+    })
+
+    return self
+  }
+
   show() {
     throw new MathError(
       "The `show` method must be overridden in a concrete class!"
