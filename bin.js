@@ -1,3 +1,3 @@
 const { plot } = require(__dirname)
-plot.browserCommand = "firefox $FILE"
+plot.browserCommand = "xdg-open $FILE"
 global.plot = plot

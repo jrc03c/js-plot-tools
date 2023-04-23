@@ -9,8 +9,7 @@
   },
   "scripts": {
     "watch": "esbuild src/browser-plotter.js --bundle --outfile=dist/js-plot-tools.js --minify --watch",
-    "build": "esbuild src/browser-plotter.js --bundle --outfile=dist/js-plot-tools.js --minify",
-    "test": "jest"
+    "build": "esbuild src/browser-plotter.js --bundle --outfile=dist/js-plot-tools.js --minify"
   },
   "keywords": [],
   "author": "",
