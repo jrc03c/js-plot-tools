@@ -9,7 +9,8 @@
   },
   "scripts": {
     "watch": "esbuild src/browser-plotter.js --bundle --outfile=dist/js-plot-tools.js --minify --watch",
-    "build": "esbuild src/browser-plotter.js --bundle --outfile=dist/js-plot-tools.js --minify"
+    "build": "esbuild src/browser-plotter.js --bundle --outfile=dist/js-plot-tools.js --minify",
+    "pub": "npm version patch --force && npm publish --access=public"
   },
   "keywords": [],
   "author": "",
